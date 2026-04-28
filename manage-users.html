@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arkibo - Manage Users</title>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+@import url('https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Roboto:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+
+:root {
+  --teal: #0f9688;
+  --teal-light: #e6f4f3;
+  --teal-dark: #0a7a6e;
+  --sidebar-w: 240px;
+  --bg: #f0f4f3;
+  --white: #ffffff;
+  --border: #e2e8e7;
+  --text: #1c2b2a;
+  --text-muted: #6b8280;
+  --topbar-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e2e8e7;
+  --sidebar-hover: #f0f4f3;
+  --sidebar-active-bg: #e6f4f3;
+  --sidebar-active-text: #0f9688;
+  --input-bg: #f0f4f3;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.12);
+  --modal-overlay: rgba(0,0,0,0.4);
+  --row-hover: #f0f4f3;
+  --thead-bg: #f8faf9;
+}
+
+[data-theme="dark"] {
+  --bg: #131c1b;
+  --white: #1e2b2a;
+  --border: #2a3b3a;
+  --text: #e2edec;
+  --text-muted: #7a9e9c;
+  --topbar-bg: #1a2b2a;
+  --sidebar-bg: #1a2b2a;
+  --sidebar-border: #2a3b3a;
+  --sidebar-hover: #22332f;
+  --sidebar-active-bg: rgba(15,150,136,0.18);
+  --sidebar-active-text: #2dd4bf;
+  --input-bg: #22332f;
+  --shadow: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.4);
+  --modal-overlay: rgba(0,0,0,0.6);
+  --row-hover: #22332f;
+  --thead-bg: #1a2b2a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ─── TOPBAR ─── */
+.topbar {
+  height: 64px;
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px 0 8px;
+  gap: 8px;
+  flex-shrink: 0;
+  z-index: 100;
+}
+
+.hamburger-btn {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: none; background: none; cursor: pointer;
+  color: var(--text); display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s; flex-shrink: 0;
+}
+.hamburger-btn:hover { background: var(--sidebar-hover); }
+
+.topbar-brand {
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+}
+.brand-icon {
+  width: 32px; height: 32px; background: var(--teal);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center;
+  font-size: 16px; flex-shrink: 0;
+}
+.brand-name {
+  font-family: 'Google Sans', sans-serif;
+  font-size: 20px; font-weight: 500; color: var(--text);
+}
+.brand-name span { color: var(--teal); }
+
+.topbar-right { display: flex; align-items: center; gap: 4px; }
+
+.icon-btn {
+  width: 40px; height: 40px; border-radius: 50%; border: none; background: none;
+  cursor: pointer; color: var(--text);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s; position: relative;
+}
+.icon-btn:hover { background: var(--sidebar-hover); }
+
+/* Settings dropdown */
+.settings-dropdown {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: var(--shadow-md);
+  min-width: 220px; z-index: 500; overflow: hidden;
+  animation: popIn 0.15s ease;
+}
+.settings-section { padding: 8px 6px; }
+.settings-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: 0.5px; padding: 4px 10px 6px;
+}
+.theme-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 10px; border-radius: 8px;
+}
+.theme-toggle-label { font-size: 13.5px; color: var(--text); font-weight: 500; }
+.toggle-switch { position: relative; width: 44px; height: 24px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-track {
+  position: absolute; inset: 0; background: var(--border);
+  border-radius: 24px; cursor: pointer; transition: background 0.2s;
+}
+.toggle-track::after {
+  content: ''; position: absolute; width: 18px; height: 18px;
+  border-radius: 50%; background: #fff; top: 3px; left: 3px;
+  transition: transform 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.toggle-switch input:checked + .toggle-track { background: var(--teal); }
+.toggle-switch input:checked + .toggle-track::after { transform: translateX(20px); }
+
+/* ─── APP BODY ─── */
+.app-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar {
+  width: var(--sidebar-w);
+  min-width: var(--sidebar-w);
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: width 0.2s ease, min-width 0.2s ease;
+}
+
+.sidebar.collapsed {
+  width: 0;
+  min-width: 0;
+  border-right: none;
+}
+
+.sidebar-nav { flex: 1; padding: 8px 0; }
+
+.nav-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 10px 14px; margin: 2px 8px;
+  border-radius: 24px; cursor: pointer;
+  font-size: 14px; color: var(--text); font-weight: 400;
+  transition: background 0.15s; white-space: nowrap;
+  font-family: 'Google Sans', sans-serif;
+}
+.nav-item:hover { background: var(--sidebar-hover); }
+.nav-item.active {
+  background: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text);
+  font-weight: 600;
+}
+.nav-item svg { flex-shrink: 0; }
+
+.nav-text {
+  white-space: nowrap;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+.sidebar.collapsed .nav-text { opacity: 0; }
+
+/* Sidebar footer */
+.sidebar-footer {
+  border-top: 1px solid var(--sidebar-border);
+  padding: 10px 8px; flex-shrink: 0;
+}
+.sidebar-user {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; border-radius: 24px; overflow: hidden;
+}
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--teal);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 11px; font-weight: 700; flex-shrink: 0;
+}
+.user-info { flex: 1; overflow: hidden; white-space: nowrap; transition: opacity 0.2s; }
+.sidebar.collapsed .user-info { opacity: 0; pointer-events: none; }
+.user-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.user-role { font-size: 11px; color: var(--text-muted); }
+.logout-btn {
+  background: none; border: 1px solid var(--border);
+  border-radius: 8px; padding: 5px 7px; cursor: pointer;
+  color: var(--text-muted); display: flex; align-items: center;
+  transition: background 0.15s, color 0.15s; flex-shrink: 0;
+}
+.logout-btn:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+.sidebar.collapsed .logout-btn { opacity: 0; pointer-events: none; }
+
+/* ─── MAIN ─── */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+/* ─── CONTENT ─── */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 16px 20px 16px;
+  min-height: 0;
+  gap: 12px;
+}
+
+/* ─── TOOLBAR ─── */
+.table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  gap: 8px;
+}
+.table-header-right { display: flex; align-items: center; gap: 8px; }
+
+.btn {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 16px; border-radius: 20px;
+  font-size: 13.5px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; border: 1px solid var(--border);
+  background: var(--white); color: var(--text);
+  font-family: 'Google Sans', sans-serif; white-space: nowrap;
+}
+.btn:hover { background: var(--sidebar-hover); }
+.btn.primary { background: var(--teal); color: #fff; border-color: var(--teal); }
+.btn.primary:hover { background: var(--teal-dark); }
+
+/* Search bar */
+.table-search {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 20px; padding: 0 14px; height: 38px;
+  flex: 1; max-width: 360px; transition: border-color 0.15s, box-shadow 0.15s;
+}
+.table-search:focus-within { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(15,150,136,0.1); }
+.table-search svg { color: var(--text-muted); flex-shrink: 0; }
+.table-search input {
+  flex: 1; border: none; background: none; outline: none;
+  font-family: inherit; font-size: 13.5px; color: var(--text);
+}
+.table-search input::placeholder { color: var(--text-muted); }
+.search-clear-btn {
+  background: none; border: none; cursor: pointer; color: var(--text-muted);
+  display: flex; align-items: center; padding: 2px; border-radius: 50%; flex-shrink: 0;
+}
+.search-clear-btn:hover { color: var(--text); }
+
+/* ─── TABLE BOX ─── */
+.table-wrap {
+  flex: 1;
+  min-height: 0;
+  background: var(--white);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.table-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+
+/* Scrollbar */
+.table-scroll::-webkit-scrollbar { height: 5px; width: 5px; }
+.table-scroll::-webkit-scrollbar-track { background: transparent; }
+.table-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+.table-scroll:hover::-webkit-scrollbar { height: 10px; width: 10px; }
+.table-scroll:hover::-webkit-scrollbar-thumb { background: var(--text-muted); }
+.table-scroll:hover::-webkit-scrollbar-track { background: var(--bg); }
+
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+
+thead th {
+  background: var(--thead-bg);
+  padding: 10px 16px;
+  text-align: left; font-weight: 500; font-size: 12px;
+  color: var(--text-muted); border-bottom: 1px solid var(--border);
+  white-space: nowrap; position: sticky; top: 0; z-index: 2;
+  font-family: 'Google Sans', sans-serif;
+}
+
+tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover { background: var(--row-hover); }
+tbody td { padding: 10px 16px; vertical-align: middle; white-space: nowrap; }
+
+/* Center specific columns */
+thead th:nth-child(4), thead th:nth-child(6),
+thead th:nth-child(7), thead th:nth-child(12) { text-align: center; }
+tbody tr:not(.expand-row) > td:nth-child(4),
+tbody tr:not(.expand-row) > td:nth-child(6),
+tbody tr:not(.expand-row) > td:nth-child(7),
+tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
+
+/* ─── PAGINATION ─── */
+.pagination-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; border-top: 1px solid var(--border);
+  font-size: 13px; color: var(--text-muted); flex-shrink: 0;
+}
+.page-controls { display: flex; align-items: center; gap: 4px; }
+.page-btn {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: none; background: none; cursor: pointer;
+  font-size: 13px; font-family: 'Google Sans', sans-serif; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center; transition: background 0.12s;
+}
+.page-btn:hover { background: var(--sidebar-hover); }
+.page-btn.active { background: var(--teal); color: #fff; }
+.page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.page-ellipsis { padding: 0 4px; color: var(--text-muted); }
+
+/* ─── SORT / FILTER PANELS ─── */
+.panel-overlay { position: fixed; inset: 0; z-index: 200; }
+
+.sort-panel, .filter-panel {
+  position: fixed; z-index: 300;
+  background: var(--white); border-radius: 12px;
+  box-shadow: var(--shadow-md); border: 1px solid var(--border);
+  min-width: 260px; animation: popIn 0.15s ease;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(.97) translateY(-6px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.panel-title {
+  font-size: 14px; font-weight: 600; padding: 14px 16px 12px;
+  border-bottom: 1px solid var(--border); color: var(--text);
+  font-family: 'Google Sans', sans-serif;
+}
+.panel-section { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.panel-section-label {
+  font-size: 11px; font-weight: 600; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .5px; margin-bottom: 8px;
+}
+.radio-row {
+  display: flex; align-items: center; gap: 9px; padding: 6px 10px;
+  border-radius: 8px; cursor: pointer; transition: background 0.1s;
+}
+.radio-row:hover { background: var(--sidebar-hover); }
+.radio-row input[type=radio] { accent-color: var(--teal); cursor: pointer; }
+.panel-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 16px; border-top: 1px solid var(--border);
+}
+
+/* Filter panel scrollable */
+.filter-panel {
+  display: flex; flex-direction: column; max-height: 80vh; min-width: 300px;
+}
+.filter-scroll { overflow-y: auto; flex: 1; }
+.filter-scroll::-webkit-scrollbar { width: 4px; }
+.filter-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.filter-section { padding: 12px 16px; border-bottom: 1px solid var(--border); }
+.filter-section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.filter-section-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.reset-link { font-size: 12px; color: var(--teal); cursor: pointer; font-weight: 500; }
+.reset-link:hover { text-decoration: underline; }
+
+.filter-input, .filter-select, .filter-search {
+  width: 100%; padding: 7px 10px; border: 1px solid var(--border);
+  border-radius: 8px; font-size: 13px; font-family: inherit;
+  color: var(--text); outline: none; background: var(--white); transition: border-color 0.15s;
+}
+.filter-input:focus, .filter-select:focus, .filter-search:focus { border-color: var(--teal); }
+.filter-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b8280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer;
+}
+.filter-search-wrap { position: relative; }
+.filter-search-wrap svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+.filter-search { padding-left: 32px; }
+
+/* ─── THREE-DOT DROPDOWN ─── */
+.dropdown-wrap { position: relative; display: inline-block; }
+.dots-btn {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 3px; width: 32px; height: 32px; border-radius: 50%;
+  border: none; background: none; cursor: pointer; padding: 0; transition: background 0.12s;
+}
+.dots-btn span { display: block; width: 3.5px; height: 3.5px; border-radius: 50%; background: var(--text-muted); }
+.dots-btn:hover { background: var(--sidebar-hover); }
+
+.dropdown-menu {
+  position: absolute; right: 0; z-index: 400;
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 12px; box-shadow: var(--shadow-md);
+  min-width: 130px; padding: 5px; animation: popIn 0.12s ease;
+}
+.dropdown-item {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 8px 12px; border: none; background: none; border-radius: 8px;
+  font-size: 13.5px; font-family: inherit; color: var(--text);
+  cursor: pointer; transition: background 0.1s;
+}
+.dropdown-item:hover { background: var(--sidebar-hover); }
+.dropdown-item.delete { color: #dc2626; }
+.dropdown-item.delete:hover { background: #fef2f2; }
+
+/* ─── EXPAND ROW ─── */
+.expand-btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--teal-light); border: none; border-radius: 12px; padding: 2px 8px;
+  cursor: pointer; color: var(--teal); font-size: 11px; font-weight: 600; transition: background 0.12s;
+}
+.expand-btn:hover { background: var(--teal); color: #fff; }
+.expand-btn svg { transition: transform 0.2s; }
+
+.expand-row td { padding: 0 !important; }
+.expand-content {
+  background: var(--thead-bg); border-top: 1px solid var(--border);
+  border-bottom: 2px solid var(--teal); padding: 12px 24px;
+  animation: expandIn 0.15s ease;
+}
+@keyframes expandIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.expand-table { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 10px; }
+.expand-table thead th {
+  background: transparent; font-size: 11px; font-weight: 600;
+  color: var(--text-muted); padding: 6px 12px;
+  border-bottom: 1px solid var(--border); white-space: nowrap; position: static;
+}
+.expand-table tbody tr { border-bottom: 1px solid var(--border); }
+.expand-table tbody tr:last-child { border-bottom: none; }
+.expand-table tbody tr:hover { background: var(--row-hover); }
+.expand-table tbody td { padding: 8px 12px; white-space: nowrap; }
+.expand-table thead th, .expand-table tbody td { text-align: left !important; }
+
+.expand-remove-btn {
+  background: none; border: none; cursor: pointer; color: var(--text-muted);
+  padding: 3px; border-radius: 4px; display: flex; align-items: center; transition: color 0.12s;
+}
+.expand-remove-btn:hover { color: #dc2626; background: #fef2f2; }
+
+.add-training-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: none; border: 1.5px dashed var(--border);
+  border-radius: 8px; padding: 6px 14px; cursor: pointer;
+  color: var(--text-muted); font-size: 13px; font-family: inherit;
+  transition: border-color 0.12s, color 0.12s, background 0.12s;
+}
+.add-training-btn:hover { border-color: var(--teal); color: var(--teal); background: var(--teal-light); }
+.add-training-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ─── MODAL ─── */
+.modal-overlay {
+  position: fixed; inset: 0;
+  background: var(--modal-overlay); backdrop-filter: blur(4px);
+  z-index: 500; animation: fadeIn 0.2s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 600; background: var(--white); border-radius: 16px;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.2);
+  width: 640px; max-width: 96vw; max-height: 88vh;
+  display: flex; flex-direction: column;
+  animation: modalPop 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalPop {
+  from { opacity: 0; transform: translate(-50%, -48%) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 22px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0;
+}
+.modal-title-row { display: flex; align-items: center; gap: 10px; }
+.modal-icon {
+  width: 32px; height: 32px; background: var(--teal-light);
+  border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--teal);
+}
+.modal-title { font-size: 15px; font-weight: 600; color: var(--text); font-family: 'Google Sans', sans-serif; }
+.modal-close {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  background: none; cursor: pointer; color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center; transition: background 0.12s;
+}
+.modal-close:hover { background: var(--sidebar-hover); }
+
+.modal-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+.modal-body::-webkit-scrollbar { width: 5px; }
+.modal-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.modal-section-title {
+  font-size: 11px; font-weight: 700; color: var(--teal);
+  text-transform: uppercase; letter-spacing: 0.6px;
+  margin: 16px 0 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--teal-light);
+  font-family: 'Google Sans', sans-serif;
+}
+.modal-section-title:first-child { margin-top: 0; }
+
+.modal-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-field { display: flex; flex-direction: column; gap: 5px; }
+.modal-field-full { grid-column: 1 / -1; }
+.modal-label { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+
+.modal-input {
+  padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;
+  font-size: 13.5px; font-family: inherit; color: var(--text); background: var(--input-bg);
+  outline: none; transition: border-color 0.15s, box-shadow 0.15s; width: 100%;
+}
+.modal-input:focus { border-color: var(--teal); background: var(--white); box-shadow: 0 0 0 3px rgba(15,150,136,0.1); }
+.modal-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b8280' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; cursor: pointer;
+}
+
+.modal-footer {
+  display: flex; align-items: center; justify-content: flex-end; gap: 10px;
+  padding: 14px 22px; border-top: 1px solid var(--border); flex-shrink: 0;
+}
+
+.date-parts { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+
+/* Add modal training rows */
+.training-row-block {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.training-row-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.training-row-num { font-size: 12px; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: 0.4px; }
+
+.hidden { display: none !important; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  a.nav-item { text-decoration:none !important; color:inherit !important; }
+  .users-wrap { background:var(--white); border-radius:12px; border:1px solid var(--border); box-shadow:var(--shadow); overflow:hidden; }
+  .users-header { display:flex; align-items:center; justify-content:space-between; padding:16px 20px; border-bottom:1px solid var(--border); }
+  .users-title { font-size:15px; font-weight:600; color:var(--text); }
+  .user-table { width:100%; border-collapse:collapse; font-size:13.5px; }
+  .user-table th { background:var(--thead-bg); padding:10px 16px; text-align:left; font-weight:500; font-size:12px; color:var(--text-muted); border-bottom:1px solid var(--border); }
+  .user-table td { padding:12px 16px; border-bottom:1px solid var(--border); color:var(--text); }
+  .user-table tr:last-child td { border-bottom:none; }
+  .user-table tr:hover td { background:var(--row-hover); }
+  .role-badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; }
+  .role-admin  { background:var(--teal-light); color:var(--teal); }
+  .role-editor { background:#e8f0fe; color:#1a56db; }
+  .role-viewer  { background:#e8f0fe; color:#1a56db; } /* alias */
+  .role-editor { background:#f0f0f0; color:#666; }
+  .status-badge { display:inline-block; padding:2px 10px; border-radius:12px; font-size:12px; font-weight:600; }
+  .status-active { background:#dcfce7; color:#166534; }
+  .status-inactive { background:#fee2e2; color:#991b1b; }
+  [data-theme="dark"] .role-editor { background:#2a3b3a; color:var(--text-muted); }
+  [data-theme="dark"] .status-active { background:#14532d; color:#86efac; }
+  [data-theme="dark"] .status-inactive { background:#450a0a; color:#fca5a5; }
+  .modal-input.pw-toggle-wrap { position:relative; }
+  </style>
+</head>
+<body>
+  <script>
+    if (sessionStorage.getItem('tt_auth') !== 'true') window.location.href = 'login.html';
+    if (sessionStorage.getItem('tt_role') !== 'admin') window.location.href = 'home.html';
+    const _t = localStorage.getItem('arkibo-theme') || 'light';
+    document.documentElement.setAttribute('data-theme', _t);
+  </script>
+
+  <header class="topbar">
+    <button class="hamburger-btn" onclick="toggleSidebar()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+    <a class="topbar-brand" href="home.html" style="text-decoration:none">
+      <div class="brand-icon">🗂️</div>
+      <span class="brand-name">Arki<span>bo</span></span>
+    </a>
+    <div style="flex:1"></div>
+    <div class="topbar-right">
+      <div style="position:relative">
+        <button class="icon-btn" onclick="toggleSettings(event)">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </button>
+        <div class="settings-dropdown hidden" id="settingsDropdown">
+          <div class="settings-section" style="border-bottom:none">
+            <div class="settings-label">Appearance</div>
+            <div class="theme-toggle-row">
+              <span class="theme-toggle-label">Dark mode</span>
+              <label class="toggle-switch"><input type="checkbox" id="themeToggle" onchange="toggleTheme(this)"><span class="toggle-track"></span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-body">
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <a class="nav-item" href="home.html" style="text-decoration:none;color:inherit">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          <span class="nav-text">Home</span>
+        </a>
+        <a class="nav-item" href="training-records.html" style="text-decoration:none;color:inherit">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <span class="nav-text">Training Records</span>
+        </a>
+        <div class="nav-item active">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span class="nav-text">Manage Users</span>
+        </div>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="user-avatar" id="sidebarAvatar">AD</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarUsername">admin1</div>
+            <div class="user-role" id="sidebarRole">Admin</div>
+          </div>
+          <button class="logout-btn" onclick="handleLogout()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="content">
+        <div class="users-wrap">
+          <div class="users-header">
+            <span class="users-title">User Accounts</span>
+            <button class="btn primary" onclick="openAddUserModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              Add User
+            </button>
+          </div>
+          <table class="user-table">
+            <thead>
+              <tr>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Last Login</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted)">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- ADD USER MODAL -->
+  <div id="addUserModalOverlay" class="modal-overlay hidden" onclick="closeAddUserModal()"></div>
+  <div id="addUserModal" class="modal hidden" style="width:420px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <div class="modal-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        <h2 class="modal-title">Add New User</h2>
+      </div>
+      <button class="modal-close" onclick="closeAddUserModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-field modal-field-full"><label class="modal-label">Username</label><input class="modal-input" id="newUsername" type="text" placeholder="e.g. jdelacruz"></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Full Name</label><input class="modal-input" id="newFullName" type="text" placeholder="e.g. Juan dela Cruz"></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Password</label><input class="modal-input" id="newPassword" type="password" placeholder="Enter password"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Role</label>
+          <select class="modal-input modal-select" id="newRole">
+            <option value="viewer">Editor (can view and edit records)</option>
+            <option value="admin">Admin (full access + manage users)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeAddUserModal()">Cancel</button>
+      <button class="btn primary" onclick="saveAddUser()">Add User</button>
+    </div>
+  </div>
+
+  <!-- EDIT USER MODAL -->
+  <div id="editUserModalOverlay" class="modal-overlay hidden" onclick="closeEditUserModal()"></div>
+  <div id="editUserModal" class="modal hidden" style="width:420px">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <div class="modal-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div>
+        <h2 class="modal-title">Edit User</h2>
+      </div>
+      <button class="modal-close" onclick="closeEditUserModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="editUserId">
+      <input type="hidden" id="editUsernamHidden">
+      <div class="modal-grid">
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Username</label>
+          <input class="modal-input" id="editUsername" type="text" placeholder="Enter username">
+          <div style="font-size:11px;color:var(--text-muted);margin-top:3px">⚠️ Changing username will require the user to log in again with the new username.</div>
+        </div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Full Name</label><input class="modal-input" id="editFullName" type="text"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">New Password <span style="font-weight:400;color:var(--text-muted)">(leave blank to keep current)</span></label>
+          <input class="modal-input" id="editPassword" type="password" placeholder="Leave blank to keep current">
+        </div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Role</label>
+          <select class="modal-input modal-select" id="editRole">
+            <option value="viewer">Editor</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Status</label>
+          <select class="modal-input modal-select" id="editIsActive">
+            <option value="1">Active</option>
+            <option value="0">Inactive</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn" id="deleteUserBtn" style="color:#dc2626;border-color:#fecaca" onclick="deleteUser()">Delete User</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn" onclick="closeEditUserModal()">Cancel</button>
+        <button class="btn primary" onclick="saveEditUser()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+const API_BASE = 'api';
+
+async function apiCall(method, ep, body) {
+  const opts = { method, headers: {'Content-Type':'application/json'} };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API_BASE+'/'+ep, opts);
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error||'API error');
+  return json;
+}
+
+// ─── LOAD USERS ───────────────────────────────────────────────────────────────
+async function loadUsers() {
+  const tbody = document.getElementById('usersTableBody');
+  try {
+    const users = await apiCall('GET', 'users.php');
+    if (!users.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted)">No users found.</td></tr>';
+      return;
+    }
+    // Store users globally so edit button can reference by index
+    window._usersData = users;
+    tbody.innerHTML = users.map((u, i) => {
+      const roleBadge  = u.role === 'admin'
+        ? '<span class="role-badge role-admin">Admin</span>'
+        : '<span class="role-badge role-editor">Editor</span>';
+      const statusBadge = (u.is_active == 1)
+        ? '<span class="status-badge status-active">Active</span>'
+        : '<span class="status-badge status-inactive">Inactive</span>';
+      const actionBtns = '';
+      return '<tr>' +
+        '<td><strong>' + u.username + '</strong></td>' +
+        '<td>' + u.full_name + '</td>' +
+        '<td>' + roleBadge + '</td>' +
+        '<td>' + statusBadge + '</td>' +
+        '<td>' + (u.last_login || 'Never') + '</td>' +
+        '<td><div style="display:flex;gap:6px">' +
+          '<button class="btn" style="padding:4px 10px;font-size:12px" onclick="openEditUserModal(window._usersData[' + i + '])">Edit</button>' +
+          actionBtns +
+        '</div></td>' +
+        '</tr>';
+    }).join('');
+  } catch(e) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:30px;color:#dc2626">'+e.message+'</td></tr>';
+  }
+}
+
+// ─── ADD USER ─────────────────────────────────────────────────────────────────
+function openAddUserModal() {
+  ['newUsername','newFullName','newPassword'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('newRole').value='viewer';
+  document.getElementById('addUserModalOverlay').classList.remove('hidden');
+  document.getElementById('addUserModal').classList.remove('hidden');
+}
+function closeAddUserModal() {
+  document.getElementById('addUserModalOverlay').classList.add('hidden');
+  document.getElementById('addUserModal').classList.add('hidden');
+}
+async function saveAddUser() {
+  const username  = document.getElementById('newUsername').value.trim();
+  const full_name = document.getElementById('newFullName').value.trim();
+  const password  = document.getElementById('newPassword').value;
+  const role      = document.getElementById('newRole').value;
+  if (!username||!full_name||!password) { alert('All fields are required.'); return; }
+  try {
+    await apiCall('POST','users.php',{username,full_name,password,role});
+    closeAddUserModal(); loadUsers();
+  } catch(e) { alert('Error: '+e.message); }
+}
+
+// ─── EDIT USER ────────────────────────────────────────────────────────────────
+function openEditUserModal(u) {
+  document.getElementById('editUserId').value    = u.id;
+  document.getElementById('editUsername').value  = u.username;
+  document.getElementById('editFullName').value  = u.full_name;
+  document.getElementById('editPassword').value  = '';
+  document.getElementById('editRole').value      = u.role;
+  document.getElementById('editIsActive').value  = u.is_active;
+  document.getElementById('editUserModalOverlay').classList.remove('hidden');
+  document.getElementById('editUserModal').classList.remove('hidden');
+}
+function closeEditUserModal() {
+  document.getElementById('editUserModalOverlay').classList.add('hidden');
+  document.getElementById('editUserModal').classList.add('hidden');
+}
+async function saveEditUser() {
+  const id        = document.getElementById('editUserId').value;
+  const full_name = document.getElementById('editFullName').value.trim();
+  const password  = document.getElementById('editPassword').value;
+  const role      = document.getElementById('editRole').value;
+  const is_active = document.getElementById('editIsActive').value;
+  if (!full_name) { alert('Full name is required.'); return; }
+  const body = { id, full_name, role, is_active };
+  if (password) body.password = password;
+  try {
+    await apiCall('PUT','users.php',body);
+    closeEditUserModal(); loadUsers();
+  } catch(e) { alert('Error: '+e.message); }
+}
+
+async function toggleUserActive(id, currentStatus) {
+  const newStatus = (currentStatus=='1'||currentStatus===1) ? 0 : 1;
+  const action = newStatus===0 ? 'deactivate' : 'activate';
+  if (!confirm('Are you sure you want to '+action+' this user?')) return;
+  try {
+    await apiCall('PUT','users.php',{id, is_active:newStatus});
+    loadUsers();
+  } catch(e) { alert('Error: '+e.message); }
+}
+
+document.addEventListener('click', () => {
+  const dd=document.getElementById('settingsDropdown'); if(dd) dd.classList.add('hidden');
+});
+
+
+const _storedUser = sessionStorage.getItem('tt_user') || 'admin1';
+const _userRole   = sessionStorage.getItem('tt_role') || 'admin';
+document.getElementById('sidebarAvatar').textContent   = _storedUser.slice(0, 2).toUpperCase();
+document.getElementById('sidebarUsername').textContent = _storedUser;
+document.getElementById('sidebarRole').textContent     = _userRole === 'admin' ? 'Admin' : 'Editor';
+
+const _ct = localStorage.getItem('arkibo-theme') || 'light';
+document.documentElement.setAttribute('data-theme', _ct);
+const _thEl = document.getElementById('themeToggle');
+if (_thEl && _ct === 'dark') _thEl.checked = true;
+
+function toggleTheme(cb) {
+  const t = cb.checked ? 'dark' : 'light';
+  document.documentElement.setAttribute('data-theme', t);
+  localStorage.setItem('arkibo-theme', t);
+}
+
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+function toggleSettings(e) {
+  e.stopPropagation();
+  const dd = document.getElementById('settingsDropdown');
+  if (dd) dd.classList.toggle('hidden');
+}
+
+document.addEventListener('click', () => {
+  const dd = document.getElementById('settingsDropdown');
+  if (dd) dd.classList.add('hidden');
+});
+
+async function handleLogout() {
+  try {
+    await fetch('api/auth.php', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'logout'})
+    });
+  } catch(e) {}
+  sessionStorage.clear();
+  window.location.href = 'login.html';
+}
+
+
+document.addEventListener('DOMContentLoaded', loadUsers);
+  
+async function deleteUser() {
+  const id       = document.getElementById('editUserId').value;
+  const username = document.getElementById('editUsernamHidden').value;
+  if (username === 'admin1') { alert('Cannot delete the main admin account.'); return; }
+  if (!confirm('Delete user "' + username + '"? This cannot be undone.')) return;
+  try {
+    const res = await fetch('api/users.php?id=' + id, { method: 'DELETE' });
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error || 'Delete failed');
+    closeEditUserModal();
+    loadUsers();
+  } catch(e) { alert('Error: ' + e.message); }
+}
+
+</script>
+</body>
+</html>
