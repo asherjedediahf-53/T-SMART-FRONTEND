@@ -650,7 +650,7 @@ tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
 </head>
 <body>
   <script>
-    if (sessionStorage.getItem('tt_auth') !== 'true') window.location.href = '/login';
+    // auth removed
     const _t = localStorage.getItem('arkibo-theme') || 'light';
     document.documentElement.setAttribute('data-theme', _t);
   </script>
@@ -1661,11 +1661,9 @@ async function printRecords() {
 }
 
 
-const _storedUser = sessionStorage.getItem('tt_user') || 'admin1';
-const _userRole   = sessionStorage.getItem('tt_role') || 'admin';
-document.getElementById('sidebarAvatar').textContent   = _storedUser.slice(0, 2).toUpperCase();
-document.getElementById('sidebarUsername').textContent = _storedUser;
-document.getElementById('sidebarRole').textContent     = _userRole === 'admin' ? 'Admin' : 'Editor';
+document.getElementById('sidebarAvatar').textContent   = 'AD';
+document.getElementById('sidebarUsername').textContent = 'admin1';
+document.getElementById('sidebarRole').textContent     = 'Admin';
 
 const _ct = localStorage.getItem('arkibo-theme') || 'light';
 document.documentElement.setAttribute('data-theme', _ct);
@@ -1693,23 +1691,14 @@ document.addEventListener('click', () => {
   if (dd) dd.classList.add('hidden');
 });
 
-async function handleLogout() {
-  try {
-    await fetch('api/auth.php', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({action: 'logout'})
-    });
-  } catch(e) {}
-  sessionStorage.clear();
+function handleLogout() {
   window.location.href = '/login';
 }
 
-// Show Manage Users only for admin
+// Always show Manage Users (auth removed)
 (function() {
-  const el   = document.getElementById('manageUsersNav');
-  const role = sessionStorage.getItem('tt_role') || '';
-  if (el) el.style.display = (role === 'admin') ? '' : 'none';
+  const el = document.getElementById('manageUsersNav');
+  if (el) el.style.display = '';
 })();
 
   </script>
