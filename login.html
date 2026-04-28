@@ -340,12 +340,9 @@
       if (e.key === 'Enter') handleLogin();
     });
 
-    async function handleLogin() {
+    function handleLogin() {
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value;
-      const btn      = document.getElementById('loginBtn');
-      const spinner  = document.getElementById('spinner');
-      const btnText  = document.getElementById('btnText');
 
       if (!username || !password) {
         showError('Please enter both username and password.');
@@ -354,47 +351,12 @@
         return;
       }
 
-      btn.disabled = true;
-      btnText.textContent = 'Signing in…';
-      spinner.classList.add('show');
-      document.getElementById('errorMsg').classList.remove('show');
-
-      try {
-        const res = await fetch('api/auth.php', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'login', username, password })
-        });
-        const result = await res.json();
-        if (res.ok && result.success) {
-          sessionStorage.setItem('tt_auth', 'true');
-          sessionStorage.setItem('tt_user', result.username);
-          sessionStorage.setItem('tt_role', result.role);
-          window.location.href = '/home';
-        } else {
-          btn.disabled = false;
-          btnText.textContent = 'Sign in';
-          spinner.classList.remove('show');
-          showError(result.error || 'Invalid username or password.');
-          document.getElementById('username').classList.add('error');
-          document.getElementById('password').classList.add('error');
-          document.getElementById('password').value = '';
-        }
-      } catch(e) {
-        btn.disabled = false;
-        btnText.textContent = 'Sign in';
-        spinner.classList.remove('show');
-        showError('Cannot connect to server. Please try again.');
-      }
+      window.location.href = '/home';
     }
 
     function showError(msg) {
       document.getElementById('errorText').textContent = msg;
       document.getElementById('errorMsg').classList.add('show');
-    }
-
-    if (sessionStorage.getItem('tt_auth') === 'true') {
-      window.location.href = '/home';
     }
   </script>
 
