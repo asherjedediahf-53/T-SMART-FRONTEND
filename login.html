@@ -370,7 +370,7 @@
           sessionStorage.setItem('tt_auth', 'true');
           sessionStorage.setItem('tt_user', result.username);
           sessionStorage.setItem('tt_role', result.role);
-          window.location.href = 'home.html';
+          window.location.href = '/home';
         } else {
           btn.disabled = false;
           btnText.textContent = 'Sign in';
@@ -394,7 +394,7 @@
     }
 
     if (sessionStorage.getItem('tt_auth') === 'true') {
-      window.location.href = 'index.html';
+      window.location.href = '/home';
     }
   </script>
 
