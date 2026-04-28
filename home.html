@@ -603,7 +603,7 @@ tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
 <body>
 
   <script>
-    if (sessionStorage.getItem('tt_auth') !== 'true') window.location.href = '/login';
+    // auth removed
     const savedTheme = localStorage.getItem('arkibo-theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
   </script>
@@ -695,12 +695,10 @@ tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
   </div>
 
   <script>
-    // Session
-    const storedUser = sessionStorage.getItem('tt_user') || 'admin1';
-    const userRole   = sessionStorage.getItem('tt_role') || 'viewer';
-    document.getElementById('sidebarAvatar').textContent   = storedUser.slice(0, 2).toUpperCase();
-    document.getElementById('sidebarUsername').textContent = storedUser;
-    document.getElementById('sidebarRole').textContent     = userRole === 'admin' ? 'Admin' : 'Editor';
+    // Static user (auth removed)
+    document.getElementById('sidebarAvatar').textContent   = 'AD';
+    document.getElementById('sidebarUsername').textContent = 'admin1';
+    document.getElementById('sidebarRole').textContent     = 'Admin';
 
     // Theme
     const ct = localStorage.getItem('arkibo-theme') || 'light';
@@ -724,22 +722,16 @@ tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
     document.getElementById('settingsDropdown').addEventListener('click', e => e.stopPropagation());
 
     // Logout
-    async function handleLogout() {
-      try { await fetch('api/auth.php', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({action:'logout'}) }); } catch(e) {}
-      sessionStorage.removeItem('tt_auth');
-      sessionStorage.removeItem('tt_user');
-      sessionStorage.removeItem('tt_role');
+    function handleLogout() {
       window.location.href = '/login';
     }
   </script>
 
 <script>
-  // Show Manage Users only for admin
+  // Always show Manage Users (auth removed)
   (function() {
     const el = document.getElementById('manageUsersNav');
-    if (!el) return;
-    const role = sessionStorage.getItem('tt_role') || '';
-    el.style.display = (role === 'admin') ? '' : 'none';
+    if (el) el.style.display = '';
   })();
 </script>
 </body>
