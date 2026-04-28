@@ -609,8 +609,8 @@ tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
 </head>
 <body>
   <script>
-    if (sessionStorage.getItem('tt_auth') !== 'true') window.location.href = 'login.html';
-    if (sessionStorage.getItem('tt_role') !== 'admin') window.location.href = 'home.html';
+    if (sessionStorage.getItem('tt_auth') !== 'true') window.location.href = '/login';
+    if (sessionStorage.getItem('tt_role') !== 'admin') window.location.href = '/home';
     const _t = localStorage.getItem('arkibo-theme') || 'light';
     document.documentElement.setAttribute('data-theme', _t);
   </script>
@@ -619,7 +619,7 @@ tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
     <button class="hamburger-btn" onclick="toggleSidebar()">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <a class="topbar-brand" href="home.html" style="text-decoration:none">
+    <a class="topbar-brand" href="/home" style="text-decoration:none">
       <div class="brand-icon">🗂️</div>
       <span class="brand-name">Arki<span>bo</span></span>
     </a>
@@ -645,11 +645,11 @@ tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
   <div class="app-body">
     <aside class="sidebar" id="sidebar">
       <nav class="sidebar-nav">
-        <a class="nav-item" href="home.html" style="text-decoration:none;color:inherit">
+        <a class="nav-item" href="/home" style="text-decoration:none;color:inherit">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
           <span class="nav-text">Home</span>
         </a>
-        <a class="nav-item" href="training-records.html" style="text-decoration:none;color:inherit">
+        <a class="nav-item" href="/training-records" style="text-decoration:none;color:inherit">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
           <span class="nav-text">Training Records</span>
         </a>
@@ -938,7 +938,7 @@ async function handleLogout() {
     });
   } catch(e) {}
   sessionStorage.clear();
-  window.location.href = 'login.html';
+  window.location.href = '/login';
 }
 
 
