@@ -719,6 +719,7 @@ async function apiCall(method, ep, body) {
 }
 
 async function loadUsers() {
+
   const tbody = document.getElementById('usersTableBody');
 
   const users = [
@@ -801,6 +802,38 @@ async function loadUsers() {
       role: 'viewer',
       is_active: 1,
       last_login: '2026-05-09 05:15 PM'
+    }
+  ];
+
+  // STORE GLOBALLY
+  window._usersData = users;
+
+  // RENDER TABLE
+  tbody.innerHTML = users.map((u) => {
+
+    const roleBadge = u.role === 'admin'
+      ? '<span class="role-badge role-admin">Admin</span>'
+      : '<span class="role-badge role-editor">Viewer</span>';
+
+    const statusBadge = u.is_active == 1
+      ? '<span class="status-badge status-active">Active</span>'
+      : '<span class="status-badge status-inactive">Inactive</span>';
+
+    return `
+      <tr>
+        <td>${u.username}</td>
+        <td>${u.full_name}</td>
+        <td>${roleBadge}</td>
+        <td>${statusBadge}</td>
+        <td>${u.last_login}</td>
+        <td>
+          <button class="btn" onclick="openEditUserModal(${u.id})">
+            Edit
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
     
 function openEditUserModal(u) {
