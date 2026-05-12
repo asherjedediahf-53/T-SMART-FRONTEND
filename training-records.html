@@ -1001,45 +1001,229 @@ function mapFromDB(r) {
   };
 }
 
-// ─── LOAD DATA ───────────────────────────────────────────────────────────────
+// ─── HARDCODED SAMPLE DATA ─────────────────────────────────────────────
+const records = [
+  {
+    id: 1,
+    lastName: "Dela Cruz",
+    firstName: "Juan",
+    middleName: "Santos",
+    suffix: "",
+    birthdate: "1988-12-03",
+    sex: "Male",
+    civilStatus: "Married",
+    education: "Graduate",
+    division: "Davao City",
+    functionalDivision: "Teaching Personnel",
+    designation: "Teacher I",
+    yearsOfService: 8,
+    ldNeeds: "Leadership Skills",
+    trainingTitle: "Classroom Management Seminar",
+    sponsor: "DepEd",
+    hours: 16,
+    trainingDate: "2025-02-15"
+  },
+  {
+    id: 2,
+    lastName: "Reyes",
+    firstName: "Maria",
+    middleName: "Lopez",
+    suffix: "",
+    birthdate: "1990-05-10",
+    sex: "Female",
+    civilStatus: "Single",
+    education: "Post-Graduate",
+    division: "Tagum City",
+    functionalDivision: "Non-Teaching Personnel",
+    designation: "HR Officer",
+    yearsOfService: 5,
+    ldNeeds: "Communication Skills",
+    trainingTitle: "HR Development Workshop",
+    sponsor: "Civil Service",
+    hours: 8,
+    trainingDate: "2025-03-10"
+  },
+  {
+    id: 3,
+    lastName: "Garcia",
+    firstName: "Pedro",
+    middleName: "Villanueva",
+    suffix: "Jr.",
+    birthdate: "1985-07-22",
+    sex: "Male",
+    civilStatus: "Married",
+    education: "Graduate",
+    division: "Panabo City",
+    functionalDivision: "Teaching Personnel",
+    designation: "Master Teacher",
+    yearsOfService: 12,
+    ldNeeds: "ICT Training",
+    trainingTitle: "Google Workspace Training",
+    sponsor: "DepEd",
+    hours: 12,
+    trainingDate: "2025-01-20"
+  },
+  {
+    id: 4,
+    lastName: "Torres",
+    firstName: "Angela",
+    middleName: "Rivera",
+    suffix: "",
+    birthdate: "1993-11-18",
+    sex: "Female",
+    civilStatus: "Single",
+    education: "Undergraduate",
+    division: "Digos City",
+    functionalDivision: "Non-Teaching Personnel",
+    designation: "Admin Assistant",
+    yearsOfService: 3,
+    ldNeeds: "Office Productivity",
+    trainingTitle: "Office Administration Training",
+    sponsor: "TESDA",
+    hours: 10,
+    trainingDate: "2025-04-01"
+  },
+  {
+    id: 5,
+    lastName: "Fernandez",
+    firstName: "Jose",
+    middleName: "Mendoza",
+    suffix: "",
+    birthdate: "1982-09-30",
+    sex: "Male",
+    civilStatus: "Married",
+    education: "Post-Graduate",
+    division: "Mati City",
+    functionalDivision: "Teaching Personnel",
+    designation: "School Principal",
+    yearsOfService: 15,
+    ldNeeds: "Strategic Planning",
+    trainingTitle: "Educational Leadership Summit",
+    sponsor: "CHED",
+    hours: 20,
+    trainingDate: "2025-02-28"
+  },
+  {
+    id: 6,
+    lastName: "Aquino",
+    firstName: "Liza",
+    middleName: "Castro",
+    suffix: "",
+    birthdate: "1995-06-09",
+    sex: "Female",
+    civilStatus: "Single",
+    education: "Graduate",
+    division: "Davao Oriental",
+    functionalDivision: "Teaching Personnel",
+    designation: "Teacher II",
+    yearsOfService: 4,
+    ldNeeds: "STEM Training",
+    trainingTitle: "STEM Innovation Workshop",
+    sponsor: "SEAMEO",
+    hours: 14,
+    trainingDate: "2025-05-05"
+  },
+  {
+    id: 7,
+    lastName: "Bautista",
+    firstName: "Carlos",
+    middleName: "Navarro",
+    suffix: "III",
+    birthdate: "1987-01-14",
+    sex: "Male",
+    civilStatus: "Married",
+    education: "Graduate",
+    division: "IGACOS",
+    functionalDivision: "Non-Teaching Personnel",
+    designation: "IT Officer",
+    yearsOfService: 9,
+    ldNeeds: "Cybersecurity",
+    trainingTitle: "Cybersecurity Awareness",
+    sponsor: "DICT",
+    hours: 18,
+    trainingDate: "2025-03-15"
+  },
+  {
+    id: 8,
+    lastName: "Lim",
+    firstName: "Christine",
+    middleName: "Uy",
+    suffix: "",
+    birthdate: "1991-04-27",
+    sex: "Female",
+    civilStatus: "Single",
+    education: "Post-Graduate",
+    division: "Regional Office XI",
+    functionalDivision: "Teaching Personnel",
+    designation: "Education Supervisor",
+    yearsOfService: 7,
+    ldNeeds: "Research Skills",
+    trainingTitle: "Action Research Seminar",
+    sponsor: "DepEd",
+    hours: 10,
+    trainingDate: "2025-06-12"
+  },
+  {
+    id: 9,
+    lastName: "Santos",
+    firstName: "Mark",
+    middleName: "Diaz",
+    suffix: "",
+    birthdate: "1989-08-11",
+    sex: "Male",
+    civilStatus: "Married",
+    education: "Graduate",
+    division: "Davao del Norte",
+    functionalDivision: "Teaching Personnel",
+    designation: "Teacher III",
+    yearsOfService: 11,
+    ldNeeds: "Curriculum Development",
+    trainingTitle: "Curriculum Planning Workshop",
+    sponsor: "DepEd",
+    hours: 15,
+    trainingDate: "2025-02-08"
+  },
+  {
+    id: 10,
+    lastName: "Villareal",
+    firstName: "Patricia",
+    middleName: "Gomez",
+    suffix: "",
+    birthdate: "1994-12-02",
+    sex: "Female",
+    civilStatus: "Single",
+    education: "Undergraduate",
+    division: "Davao de Oro",
+    functionalDivision: "Non-Teaching Personnel",
+    designation: "Records Officer",
+    yearsOfService: 2,
+    ldNeeds: "Data Management",
+    trainingTitle: "Records Digitization Training",
+    sponsor: "National Archives",
+    hours: 9,
+    trainingDate: "2025-01-30"
+  }
+];
+
+
+// ─── LOAD DATA ─────────────────────────────────────────────────────────
 async function loadData(resetPage) {
   if (resetPage) serverPage = 1;
-  const tbody = document.getElementById('tableBody');
-  if (tbody) tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;padding:30px;color:var(--text-muted)">Loading...</td></tr>';
 
-  const p = new URLSearchParams({
-    page: serverPage, limit: SERVER_LIMIT, sort: sortDir
-  });
-  if (searchQuery)               p.set('search',    searchQuery);
-  if (filterState.division)      p.set('division',  filterState.division);
-  if (filterState.functionalDiv) p.set('funcDiv',   filterState.functionalDiv);
-  if (filterState.education)     p.set('education', filterState.education);
-  if (filterState.designation)   p.set('designation', filterState.designation);
-  if (filterState.years)         p.set('years',     filterState.years);
-  if (filterState.ldNeeds)       p.set('ldNeeds',   filterState.ldNeeds);
-  if (filterState.training)      p.set('training',  filterState.training);
-
-  try {
-    const result = await apiGet('personnel.php?' + p.toString());
-    if (Array.isArray(result)) {
-      data = result.map(mapFromDB); serverTotal = data.length;
-    } else {
-      data = (result.data || []).map(mapFromDB); serverTotal = result.total || data.length;
-    }
-  } catch(e) {
-    console.error('loadData:', e);
-    data = []; serverTotal = 0;
-    if (tbody) tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;padding:30px;color:var(--text-muted)">No records yet. Click Add Record to start.</td></tr>';
-    document.getElementById('entryInfo').textContent = '0 records';
-    document.getElementById('pageControls').innerHTML = '';
-    return;
-  }
+  // HARD CODED FRONT-END DATA
+  data = records;
+  serverTotal = data.length;
 
   renderTableRows();
   renderPagination();
-  const start = serverTotal === 0 ? 0 : (serverPage-1)*SERVER_LIMIT+1;
-  const end   = Math.min(serverPage*SERVER_LIMIT, serverTotal);
-  document.getElementById('entryInfo').textContent = serverTotal === 0 ? '0 records' : start+'–'+end+' of '+serverTotal+' records';
+
+  const start = serverTotal === 0 ? 0 : (serverPage - 1) * SERVER_LIMIT + 1;
+  const end = Math.min(serverPage * SERVER_LIMIT, serverTotal);
+
+  document.getElementById('entryInfo').textContent =
+    serverTotal === 0
+      ? '0 records'
+      : start + '–' + end + ' of ' + serverTotal + ' records';
 }
 
 // ─── RENDER TABLE ─────────────────────────────────────────────────────────────
