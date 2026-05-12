@@ -721,52 +721,88 @@ async function apiCall(method, ep, body) {
 async function loadUsers() {
   const tbody = document.getElementById('usersTableBody');
 
-  try {
-    const users = await apiCall('GET', 'users.php');
-
-    if (!users.length) {
-      tbody.innerHTML =
-        '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted)">No users found.</td></tr>';
-      return;
-    }
-
-    window._usersData = users;
-
-    tbody.innerHTML = users.map((u, i) => {
-
-      const roleBadge = u.role === 'admin'
-        ? '<span class="role-badge role-admin">Admin</span>'
-        : '<span class="role-badge role-editor">Editor</span>';
-
-      const statusBadge = u.is_active == 1
-        ? '<span class="status-badge status-active">Active</span>'
-        : '<span class="status-badge status-inactive">Inactive</span>';
-
-      return `
-        <tr>
-          <td><strong>${u.username}</strong></td>
-          <td>${u.full_name}</td>
-          <td>${roleBadge}</td>
-          <td>${statusBadge}</td>
-          <td>${u.last_login || 'Never'}</td>
-          <td>
-            <button class="btn"
-              style="padding:4px 10px;font-size:12px"
-              onclick="openEditUserModal(window._usersData[${i}])">
-              Edit
-            </button>
-          </td>
-        </tr>
-      `;
-    }).join('');
-
-  } catch(e) {
-
-    tbody.innerHTML =
-  '<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--text-muted)">Unable to load users.</td></tr>';
-  }
+  const users = [
+    {
+      id: 1,
+      username: 'admin1',
+      full_name: 'Juan Dela Cruz',
+      role: 'admin',
+      is_active: 1,
+      last_login: '2026-05-10 08:15 AM'
+    },
+    {
+      id: 2,
+      username: 'mreyes',
+      full_name: 'Maria Reyes',
+      role: 'viewer',
+      is_active: 1,
+      last_login: '2026-05-09 01:22 PM'
+    },
+    {
+      id: 3,
+      username: 'pgarcia',
+      full_name: 'Pedro Garcia',
+      role: 'viewer',
+      is_active: 0,
+      last_login: '2026-05-08 11:45 AM'
+    },
+    {
+      id: 4,
+      username: 'atorres',
+      full_name: 'Angela Torres',
+      role: 'viewer',
+      is_active: 1,
+      last_login: '2026-05-11 09:30 AM'
+    },
+    {
+      id: 5,
+      username: 'jfernandez',
+      full_name: 'Jose Fernandez',
+      role: 'admin',
+      is_active: 1,
+      last_login: '2026-05-07 04:10 PM'
+    },
+    {
+      id: 6,
+      username: 'laquino',
+      full_name: 'Liza Aquino',
+      role: 'viewer',
+      is_active: 1,
+      last_login: '2026-05-10 02:40 PM'
+    },
+    {
+      id: 7,
+      username: 'cbautista',
+      full_name: 'Carlos Bautista',
+      role: 'viewer',
+      is_active: 0,
+      last_login: '2026-05-06 10:05 AM'
+    },
+    {
+      id: 8,
+      username: 'clim',
+      full_name: 'Christine Lim',
+      role: 'admin',
+      is_active: 1,
+      last_login: '2026-05-11 03:50 PM'
+    },
+    {
+      id: 9,
+      username: 'msantos',
+      full_name: 'Mark Santos',
+      role: 'viewer',
+      is_active: 1,
+      last_login: '2026-05-12 08:00 AM'
+    },
+    {
+      id: 10,
+      username: 'pvillareal',
+      full_name: 'Patricia Villareal',
+      role: 'viewer',
+      is_active: 1,
+      last_login: '2026-05-09 05:15 PM'
 }
-
+    
 function openEditUserModal(u) {
   document.getElementById('editUserId').value = u.id;
   document.getElementById('editUsername').value = u.username;
