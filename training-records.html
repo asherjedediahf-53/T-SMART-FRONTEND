@@ -793,6 +793,154 @@ tbody tr:not(.expand-row) > td:nth-child(12) { text-align: center; }
     </div>
   </div>
 
+  <!-- ADD MODAL -->
+  <div id="addModalOverlay" class="modal-overlay hidden" onclick="closeAddModal()"></div>
+  <div id="addModal" class="modal hidden">
+    <div class="modal-header">
+      <div class="modal-title-row"><div class="modal-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h2 class="modal-title">Add New Record</h2></div>
+      <button class="modal-close" onclick="closeAddModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-title">Personal Information</div>
+      <div class="modal-grid">
+        <div class="modal-field"><label class="modal-label">Last Name</label><input class="modal-input" id="addLastName" type="text" placeholder="Last name"></div>
+        <div class="modal-field"><label class="modal-label">First Name</label><input class="modal-input" id="addFirstName" type="text" placeholder="First name"></div>
+        <div class="modal-field"><label class="modal-label">Middle Name</label><input class="modal-input" id="addMiddleName" type="text" placeholder="Middle name"></div>
+        <div class="modal-field"><label class="modal-label">Suffix</label><input class="modal-input" id="addSuffix" type="text" placeholder="Jr., Sr., II"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Birthdate (DD/MM/YYYY)</label>
+          <div class="date-parts">
+            <select class="modal-input modal-select" id="addBdDay"><option value="">DD</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+            <select class="modal-input modal-select" id="addBdMonth"><option value="">MM</option><option value="01">01 - January</option><option value="02">02 - February</option><option value="03">03 - March</option><option value="04">04 - April</option><option value="05">05 - May</option><option value="06">06 - June</option><option value="07">07 - July</option><option value="08">08 - August</option><option value="09">09 - September</option><option value="10">10 - October</option><option value="11">11 - November</option><option value="12">12 - December</option></select>
+            <select class="modal-input modal-select" id="addBdYear"><option value="">YYYY</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option></select>
+          </div>
+        </div>
+        <div class="modal-field"><label class="modal-label">Sex</label><select class="modal-input modal-select" id="addSex"><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+        <div class="modal-field"><label class="modal-label">Civil Status</label><select class="modal-input modal-select" id="addCivilStatus"><option value="">Select</option><option>Single</option><option>Married</option><option>Annulled</option><option>Widow/er</option></select></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Highest Educational Attainment</label><select class="modal-input modal-select" id="addEducation"><option value="">Select</option><option>Undergraduate</option><option>Graduate</option><option>Post-Graduate</option></select></div>
+      </div>
+      <div class="modal-section-title">Employment Details</div>
+      <div class="modal-grid">
+        <div class="modal-field"><label class="modal-label">Division</label><select class="modal-input modal-select" id="addDivision"><option value="">Select</option><option>Davao City</option><option>Digos City</option><option>Panabo City</option><option>Tagum City</option><option>Davao del Sur</option><option>Davao del Norte</option><option>Davao Oriental</option><option>Davao Occidental</option><option>Mati City</option><option>IGACOS</option><option>Davao de Oro</option><option>Regional Office XI</option></select></div>
+        <div class="modal-field"><label class="modal-label">Functional Division</label><select class="modal-input modal-select" id="addFunctionalDiv"><option value="">Select</option><option>Teaching Personnel</option><option>Non-Teaching Personnel</option></select></div>
+        <div class="modal-field"><label class="modal-label">Designation</label><input class="modal-input" id="addDesignation" type="text" placeholder="e.g. Administration Office"></div>
+        <div class="modal-field"><label class="modal-label">Years of Service</label><input class="modal-input" id="addYears" type="number" min="0" placeholder="e.g. 5"></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Learning and Development Needs</label><input class="modal-input" id="addLdNeeds" type="text" placeholder="Enter L&D needs"></div>
+      </div>
+      <div class="modal-section-title">Training Information</div>
+      <div id="addTrainingsList" style="margin-top:4px;display:flex;flex-direction:column;gap:10px;"></div>
+      <button class="add-training-btn" id="addMoreTrainingBtn" onclick="addTrainingRow()" style="margin-top:10px">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add Training Entry
+      </button>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeAddModal()">Cancel</button>
+      <button class="btn primary" onclick="saveAdd()">Add Record</button>
+    </div>
+  </div>
+
+
+  <!-- EDIT MODAL -->
+  <div id="editModalOverlay" class="modal-overlay hidden" onclick="closeEditModal()"></div>
+  <div id="editModal" class="modal hidden">
+    <div class="modal-header">
+      <div class="modal-title-row"><div class="modal-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><h2 class="modal-title" id="editModalTitle">Edit Record</h2></div>
+      <button class="modal-close" onclick="closeEditModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <input type="hidden" id="editIdx">
+    <div class="modal-body">
+      <div class="modal-section-title">Personal Information</div>
+      <div class="modal-grid">
+        <div class="modal-field"><label class="modal-label">Last Name</label><input class="modal-input" id="editLastName" type="text"></div>
+        <div class="modal-field"><label class="modal-label">First Name</label><input class="modal-input" id="editFirstName" type="text"></div>
+        <div class="modal-field"><label class="modal-label">Middle Name</label><input class="modal-input" id="editMiddleName" type="text"></div>
+        <div class="modal-field"><label class="modal-label">Suffix</label><input class="modal-input" id="editSuffix" type="text"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Birthdate (DD/MM/YYYY)</label>
+          <div class="date-parts">
+            <select class="modal-input modal-select" id="editBdDay"><option value="">DD</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+            <select class="modal-input modal-select" id="editBdMonth"><option value="">MM</option><option value="01">01 - January</option><option value="02">02 - February</option><option value="03">03 - March</option><option value="04">04 - April</option><option value="05">05 - May</option><option value="06">06 - June</option><option value="07">07 - July</option><option value="08">08 - August</option><option value="09">09 - September</option><option value="10">10 - October</option><option value="11">11 - November</option><option value="12">12 - December</option></select>
+            <select class="modal-input modal-select" id="editBdYear"><option value="">YYYY</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option></select>
+          </div>
+        </div>
+        <div class="modal-field"><label class="modal-label">Sex</label><select class="modal-input modal-select" id="editSex"><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+        <div class="modal-field"><label class="modal-label">Civil Status</label><select class="modal-input modal-select" id="editCivilStatus"><option value="">Select</option><option>Single</option><option>Married</option><option>Annulled</option><option>Widow/er</option></select></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Highest Educational Attainment</label><select class="modal-input modal-select" id="editEducation"><option value="">Select</option><option>Undergraduate</option><option>Graduate</option><option>Post-Graduate</option></select></div>
+      </div>
+      <div class="modal-section-title">Employment Details</div>
+      <div class="modal-grid">
+        <div class="modal-field"><label class="modal-label">Division</label><select class="modal-input modal-select" id="editDivision"><option value="">Select</option><option>Davao City</option><option>Digos City</option><option>Panabo City</option><option>Tagum City</option><option>Davao del Sur</option><option>Davao del Norte</option><option>Davao Oriental</option><option>Davao Occidental</option><option>Mati City</option><option>IGACOS</option><option>Davao de Oro</option><option>Regional Office XI</option></select></div>
+        <div class="modal-field"><label class="modal-label">Functional Division</label><select class="modal-input modal-select" id="editFunctionalDiv"><option value="">Select</option><option>Teaching Personnel</option><option>Non-Teaching Personnel</option></select></div>
+        <div class="modal-field"><label class="modal-label">Designation</label><input class="modal-input" id="editDesignation" type="text"></div>
+        <div class="modal-field"><label class="modal-label">Years of Service</label><input class="modal-input" id="editYears" type="number" min="0"></div>
+        <div class="modal-field modal-field-full"><label class="modal-label">Learning and Development Needs</label><input class="modal-input" id="editLdNeeds" type="text"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeEditModal()">Cancel</button>
+      <button class="btn primary" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+
+
+  <!-- ADD TRAINING MODAL -->
+  <div id="addTrainingModalOverlay" class="modal-overlay hidden" onclick="closeAddTrainingModal()"></div>
+  <div id="addTrainingModal" class="modal hidden" style="width:480px">
+    <div class="modal-header">
+      <div class="modal-title-row"><div class="modal-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+      <h2 class="modal-title">Add Training Entry <span id="atModalCount" style="font-size:12px;color:var(--text-muted);font-weight:400"></span></h2></div>
+      <button class="modal-close" onclick="closeAddTrainingModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-field modal-field-full"><label class="modal-label">Title of Training</label><input class="modal-input" id="atTitle" type="text" placeholder="Enter training title"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Date of Training (DD/MM/YYYY)</label>
+          <div class="date-parts">
+            <select class="modal-input modal-select" id="atDay"><option value="">DD</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+            <select class="modal-input modal-select" id="atMonth"><option value="">MM</option><option value="01">01 - January</option><option value="02">02 - February</option><option value="03">03 - March</option><option value="04">04 - April</option><option value="05">05 - May</option><option value="06">06 - June</option><option value="07">07 - July</option><option value="08">08 - August</option><option value="09">09 - September</option><option value="10">10 - October</option><option value="11">11 - November</option><option value="12">12 - December</option></select>
+            <select class="modal-input modal-select" id="atYear"><option value="">YYYY</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option></select>
+          </div>
+        </div>
+        <div class="modal-field"><label class="modal-label">No. of Hours</label><input class="modal-input" id="atHours" type="number" min="0" placeholder="e.g. 8"></div>
+        <div class="modal-field"><label class="modal-label">Sponsor</label><input class="modal-input" id="atSponsor" type="text" placeholder="Enter sponsor"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeAddTrainingModal()">Cancel</button>
+      <button class="btn primary" onclick="saveAddTraining()">Add Training</button>
+    </div>
+  </div>
+
+
+  <!-- EDIT TRAINING MODAL -->
+  <div id="editTrainingModalOverlay" class="modal-overlay hidden" onclick="closeEditTrainingModal()"></div>
+  <div id="editTrainingModal" class="modal hidden" style="width:480px">
+    <div class="modal-header">
+      <div class="modal-title-row"><div class="modal-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></div><h2 class="modal-title">Edit Training Entry</h2></div>
+      <button class="modal-close" onclick="closeEditTrainingModal()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="modal-field modal-field-full"><label class="modal-label">Title of Training</label><input class="modal-input" id="etTitle" type="text"></div>
+        <div class="modal-field modal-field-full">
+          <label class="modal-label">Date of Training (DD/MM/YYYY)</label>
+          <div class="date-parts">
+            <select class="modal-input modal-select" id="etDay"><option value="">DD</option><option value="01">01</option><option value="02">02</option><option value="03">03</option><option value="04">04</option><option value="05">05</option><option value="06">06</option><option value="07">07</option><option value="08">08</option><option value="09">09</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+            <select class="modal-input modal-select" id="etMonth"><option value="">MM</option><option value="01">01 - January</option><option value="02">02 - February</option><option value="03">03 - March</option><option value="04">04 - April</option><option value="05">05 - May</option><option value="06">06 - June</option><option value="07">07 - July</option><option value="08">08 - August</option><option value="09">09 - September</option><option value="10">10 - October</option><option value="11">11 - November</option><option value="12">12 - December</option></select>
+            <select class="modal-input modal-select" id="etYear"><option value="">YYYY</option><option value="1990">1990</option><option value="1991">1991</option><option value="1992">1992</option><option value="1993">1993</option><option value="1994">1994</option><option value="1995">1995</option><option value="1996">1996</option><option value="1997">1997</option><option value="1998">1998</option><option value="1999">1999</option><option value="2000">2000</option><option value="2001">2001</option><option value="2002">2002</option><option value="2003">2003</option><option value="2004">2004</option><option value="2005">2005</option><option value="2006">2006</option><option value="2007">2007</option><option value="2008">2008</option><option value="2009">2009</option><option value="2010">2010</option><option value="2011">2011</option><option value="2012">2012</option><option value="2013">2013</option><option value="2014">2014</option><option value="2015">2015</option><option value="2016">2016</option><option value="2017">2017</option><option value="2018">2018</option><option value="2019">2019</option><option value="2020">2020</option><option value="2021">2021</option><option value="2022">2022</option><option value="2023">2023</option><option value="2024">2024</option><option value="2025">2025</option><option value="2026">2026</option><option value="2027">2027</option><option value="2028">2028</option><option value="2029">2029</option><option value="2030">2030</option></select>
+          </div>
+        </div>
+        <div class="modal-field"><label class="modal-label">No. of Hours</label><input class="modal-input" id="etHours" type="number" min="0"></div>
+        <div class="modal-field"><label class="modal-label">Sponsor</label><input class="modal-input" id="etSponsor" type="text"></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeEditTrainingModal()">Cancel</button>
+      <button class="btn primary" onclick="saveEditTraining()">Save Changes</button>
+    </div>
+  </div>
+
   <script>
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const API_BASE    = 'api';
