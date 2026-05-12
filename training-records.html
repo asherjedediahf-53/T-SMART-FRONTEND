@@ -1330,44 +1330,6 @@ function closeAddModal() {
   document.getElementById('addModal').classList.add('hidden');
 }
 async function saveAdd() {
-  const lastName  = document.getElementById('addLastName').value.trim();
-  const firstName = document.getElementById('addFirstName').value.trim();
-  if (!lastName || !firstName) { alert('Last Name and First Name are required.'); return; }
-
-  const trainings = addTrainingRows.map(id=>({
-    title:       (document.getElementById('atitle-'+id)||{}).value?.trim()||'',
-    train_day:   parseInt((document.getElementById('aday-'+id)||{}).value)||null,
-    train_month: parseInt((document.getElementById('amonth-'+id)||{}).value)||null,
-    train_year:  parseInt((document.getElementById('ayear-'+id)||{}).value)||null,
-    hours:       parseInt((document.getElementById('ahours-'+id)||{}).value)||null,
-    sponsor:     (document.getElementById('asponsor-'+id)||{}).value?.trim()||null,
-  })).filter(t=>t.title);
-
-  if (!trainings.length) { alert('Please add at least one training entry with a title.'); return; }
-
-  const body = {
-    last_name:        lastName,
-    first_name:       firstName,
-    middle_name:      document.getElementById('addMiddleName').value.trim()||null,
-    suffix:           document.getElementById('addSuffix').value.trim()||null,
-    birth_day:        parseInt(document.getElementById('addBdDay').value)||null,
-    birth_month:      parseInt(document.getElementById('addBdMonth').value)||null,
-    birth_year:       parseInt(document.getElementById('addBdYear').value)||null,
-    sex:              document.getElementById('addSex').value||null,
-    civil_status:     document.getElementById('addCivilStatus').value||null,
-    education:        document.getElementById('addEducation').value||null,
-    division:         document.getElementById('addDivision').value||null,
-    functional_div:   document.getElementById('addFunctionalDiv').value||null,
-    designation:      document.getElementById('addDesignation').value.trim()||null,
-    years_of_service: parseInt(document.getElementById('addYears').value)||null,
-    ld_needs:         document.getElementById('addLdNeeds').value.trim()||null,
-    trainings,
-  };
-  try {
-    await apiPost('personnel.php', body);
-    closeAddModal();
-    serverPage=1; loadData(true);
-  } catch(e) { alert('Error adding record: '+e.message); }
 }
 
 // ─── ADD TRAINING (from expand row) ──────────────────────────────────────────
@@ -1387,25 +1349,6 @@ function closeAddTrainingModal() {
   _atIdx=null;
 }
 async function saveAddTraining() {
-  if (_atIdx===null) return;
-  const r = data[_atIdx];
-  if (r.trainings.length>=50) { alert('Max 50 trainings reached.'); return; }
-  const title = document.getElementById('atTitle').value.trim();
-  if (!title) { alert('Training title is required.'); return; }
-  try {
-    await apiPost('trainings.php', {
-      personnel_id: r._id, title,
-      train_day:   parseInt(document.getElementById('atDay').value)||null,
-      train_month: parseInt(document.getElementById('atMonth').value)||null,
-      train_year:  parseInt(document.getElementById('atYear').value)||null,
-      hours:       parseInt(document.getElementById('atHours').value)||null,
-      sponsor:     document.getElementById('atSponsor').value.trim()||null,
-    });
-    const saved = _atIdx;
-    closeAddTrainingModal();
-    await loadData(false);
-    setTimeout(()=>{ const row=document.getElementById('expand-row-'+saved); if(row) row.classList.remove('hidden'); },100);
-  } catch(e) { alert('Error: '+e.message); }
 }
 
 // ─── EDIT TRAINING ────────────────────────────────────────────────────────────
