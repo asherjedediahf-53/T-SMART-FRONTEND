@@ -1375,59 +1375,11 @@ function _months() { return ['January','February','March','April','May','June','
 function _years()  { return Array.from({length:41},(_,i)=>{ const y=String(1990+i); return [y,y]; }); }
 
 function addTrainingRow() {
-  if (addTrainingRows.length >= 50) { alert('Maximum 50 trainings.'); return; }
-  const id = Date.now();
-  addTrainingRows.push(id);
-  const list = document.getElementById('addTrainingsList');
-  const wrap = document.createElement('div');
-  wrap.className='training-row-block'; wrap.id='trow-'+id;
-
-  const hdr = document.createElement('div'); hdr.className='training-row-header';
-  const num = document.createElement('span'); num.className='training-row-num'; num.textContent='Training #'+addTrainingRows.length;
-  hdr.appendChild(num);
-  if (addTrainingRows.length > 1) {
-    const rm = document.createElement('button'); rm.className='expand-remove-btn'; rm.type='button';
-    rm.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-    rm.onclick=()=>removeTrainingRow(id); hdr.appendChild(rm);
-  }
-  wrap.appendChild(hdr);
-
-  const grid = document.createElement('div'); grid.className='modal-grid';
-
-  const tf = document.createElement('div'); tf.className='modal-field modal-field-full';
-  tf.innerHTML='<label class="modal-label">Title of Training</label>';
-  const ti = document.createElement('input'); ti.className='modal-input'; ti.id='atitle-'+id; ti.type='text'; ti.placeholder='Enter training title';
-  tf.appendChild(ti); grid.appendChild(tf);
-
-  const df = document.createElement('div'); df.className='modal-field modal-field-full';
-  const dl = document.createElement('label'); dl.className='modal-label'; dl.textContent='Date of Training (DD/MM/YYYY)';
-  df.appendChild(dl);
-  const dp = document.createElement('div'); dp.className='date-parts';
-  dp.appendChild(_sel('aday-'+id,'DD',_days()));
-  dp.appendChild(_sel('amonth-'+id,'MM',_months()));
-  dp.appendChild(_sel('ayear-'+id,'YYYY',_years()));
-  df.appendChild(dp); grid.appendChild(df);
-
-  const hf = document.createElement('div'); hf.className='modal-field';
-  hf.innerHTML='<label class="modal-label">No. of Hours</label>';
-  const hi = document.createElement('input'); hi.className='modal-input'; hi.id='ahours-'+id; hi.type='number'; hi.min='0'; hi.placeholder='e.g. 8';
-  hf.appendChild(hi); grid.appendChild(hf);
-
-  const sf = document.createElement('div'); sf.className='modal-field';
-  sf.innerHTML='<label class="modal-label">Sponsor</label>';
-  const si = document.createElement('input'); si.className='modal-input'; si.id='asponsor-'+id; si.type='text'; si.placeholder='Enter sponsor';
-  sf.appendChild(si); grid.appendChild(sf);
-
-  wrap.appendChild(grid);
-  list.appendChild(wrap);
-  const btn=document.getElementById('addMoreTrainingBtn');
-  if(btn) btn.textContent='+ Add Another Training ('+addTrainingRows.length+'/50)';
+  
 }
 
 function removeTrainingRow(id) {
-  addTrainingRows = addTrainingRows.filter(x=>x!==id);
-  const el = document.getElementById('trow-'+id); if(el) el.remove();
-  document.querySelectorAll('.training-row-num').forEach((el,i)=>{ el.textContent='Training #'+(i+1); });
+  
 }
 
 function openAddModal() {
@@ -1490,34 +1442,11 @@ function closeEditTrainingModal() {
   _etIdx=null; _etTi=null;
 }
 async function saveEditTraining() {
-  const t = data[_etIdx].trainings[_etTi];
-  try {
-    await apiPut('trainings.php', {
-      id: t._id,
-      title:       document.getElementById('etTitle').value.trim(),
-      train_day:   parseInt(document.getElementById('etDay').value)||null,
-      train_month: parseInt(document.getElementById('etMonth').value)||null,
-      train_year:  parseInt(document.getElementById('etYear').value)||null,
-      hours:       parseInt(document.getElementById('etHours').value)||null,
-      sponsor:     document.getElementById('etSponsor').value.trim()||null,
-    });
-    const saved=_etIdx;
-    closeEditTrainingModal();
-    await loadData(false);
-    setTimeout(()=>{ const row=document.getElementById('expand-row-'+saved); if(row) row.classList.remove('hidden'); },100);
-  } catch(e) { alert('Error: '+e.message); }
+  
 }
 
 async function removeTraining(idx, ti) {
-  closeAllDropdowns();
-  const r=data[idx];
-  if (r.trainings.length<=1) { alert('Must have at least one training entry.'); return; }
-  if (!confirm('Remove this training entry?')) return;
-  try {
-    await apiDelete('trainings.php?id='+r.trainings[ti]._id);
-    await loadData(false);
-    setTimeout(()=>{ const row=document.getElementById('expand-row-'+idx); if(row) row.classList.remove('hidden'); },100);
-  } catch(e) { alert('Error: '+e.message); }
+  
 }
 
 // ─── SORT & FILTER ────────────────────────────────────────────────────────────
