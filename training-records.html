@@ -1106,49 +1106,69 @@ const records = [
 ];
 
 // ─── LOAD DATA ─────────────────────────────────────────────────────────
-async function loadData(resetPage = false) {
+async function loadData() {
 
-  if (resetPage) {
-    serverPage = 1;
-  }
-
-  // USE HARDCODED DATA
   data = records;
 
-  // TOTAL RECORDS
   serverTotal = data.length;
 
-  // RENDER TABLE
   renderTableRows();
 
-  // PAGINATION
-  renderPagination();
-
-  // ENTRY INFO
-  const start = serverTotal === 0
-    ? 0
-    : ((serverPage - 1) * SERVER_LIMIT) + 1;
-
-  const end = Math.min(
-    serverPage * SERVER_LIMIT,
-    serverTotal
-  );
-
   document.getElementById('entryInfo').textContent =
-    serverTotal === 0
-      ? '0 records'
-      : `${start}–${end} of ${serverTotal} records`;
+    `${serverTotal} records`;
 }
-
+    
 // ─── RENDER TABLE ─────────────────────────────────────────────────────────────
 function renderTableRows() {
+
   const tbody = document.getElementById('tableBody');
+
   if (!tbody) return;
-  if (!data.length) {
-    tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;padding:30px;color:var(--text-muted)">No records found.</td></tr>';
+
+  tbody.innerHTML = '';
+
+  if (!data || data.length === 0) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="14" style="text-align:center;padding:30px;">
+          No records found
+        </td>
+      </tr>
+    `;
+
     return;
   }
-  tbody.innerHTML = data.map((r, i) => buildRow(r, i)).join('');
+
+  data.forEach((r) => {
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${r.lastName}</td>
+        <td>${r.firstName}</td>
+        <td>${r.middleName}</td>
+        <td>${r.suffix}</td>
+        <td>${r.birthdate}</td>
+        <td>${r.sex}</td>
+        <td>${r.civilStatus}</td>
+        <td>${r.education}</td>
+        <td>${r.division}</td>
+        <td>${r.functionalDivision}</td>
+        <td>${r.designation}</td>
+        <td>${r.yearsOfService}</td>
+        <td>${r.ldNeeds}</td>
+        <td>
+          <button class="btn btn-sm">
+            View
+          </button>
+
+          <button class="btn btn-sm">
+            Edit
+          </button>
+        </td>
+      </tr>
+    `;
+  });
 }
 
 function buildRow(r, idx) {
