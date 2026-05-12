@@ -854,55 +854,7 @@ function closeEditUserModal() {
 }
 
 async function saveEditUser() {
-  const id = document.getElementById('editUserId').value;
-  const full_name = document.getElementById('editFullName').value.trim();
-  const password = document.getElementById('editPassword').value;
-  const role = document.getElementById('editRole').value;
-  const is_active = document.getElementById('editIsActive').value;
-
-  if (!full_name) {
-    alert('Full name is required.');
-    return;
-  }
-
-  const body = {
-    id,
-    full_name,
-    role,
-    is_active
-  };
-
-  if (password) body.password = password;
-
-  try {
-    await apiCall('PUT', 'users.php', body);
-    closeEditUserModal();
-    loadUsers();
-  } catch(e) {
-    alert('Error: ' + e.message);
-  }
-}
-
-async function deleteUser() {
-  const id = document.getElementById('editUserId').value;
-
-  if (!confirm('Delete this user? This cannot be undone.')) return;
-
-  try {
-    const res = await fetch('api/users.php?id=' + id, {
-      method: 'DELETE'
-    });
-
-    const json = await res.json();
-
-    if (!res.ok) throw new Error(json.error || 'Delete failed');
-
-    closeEditUserModal();
-    loadUsers();
-
-  } catch(e) {
-    alert('Error: ' + e.message);
-  }
+  
 }
 
 function toggleSidebar() {
